@@ -23,3 +23,11 @@ parallelisation and GPU execution, from high level constructions.
   https://github.com/Jutho/TensorOperations.jl
 - [ ] Play with C_∞ / D_∞ symmetry for diatomic CCSD interaction energies
 
+### References
+
+- Attila Szabo and Neil S. Ostlund - Modern Quantum Chemistry
+(https://www.amazon.co.uk/Modern-Quantum-Chemistry-Introduction-Electronic/dp/0486691861)
+- David B. Cook - Handbook of Computational Quantum Chemistry
+(https://www.amazon.co.uk/Handbook-Computational-Quantum-Chemistry-Dover/dp/0486443078)
+- PyQuante2 (https://github.com/rpmuller/pyquante2)
+
