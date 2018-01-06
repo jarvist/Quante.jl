@@ -1,5 +1,10 @@
 # Quante.jl
 
+[![Build Status](https://travis-ci.org/jarvist/Quante.jl.svg?branch=master)](https://travis-ci.org/jarvist/Quante.jl)
+[![Coverage
+Status](https://coveralls.io/repos/jarvist/Quante.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/jarvist/Quante.jl?branch=master)
+[![codecov.io](http://codecov.io/github/jarvist/Quante.jl/coverage.svg?branch=master)](http://codecov.io/github/jarvist/Quante.jl?branch=master)
+
 An open-source implementation of quantum-chemistry methods in the Julia
 programming language. 
 These codes are based on Rick Muller's pyquante2 
