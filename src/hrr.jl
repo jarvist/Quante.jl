@@ -36,7 +36,10 @@ function hrr(aexpn::Float64,ax::Float64,ay::Float64,az::Float64,aI::Int64,aJ::In
     return vrr(aexpn,ax,ay,az,aI,aJ,aK,bexpn,bx,by,bz,cexpn,cx,cy,cz,cI,cJ,cK,dexpn,dx,dy,dz,0)
 end
 
+"""
+Vertical Recurrence Relationship (VRR) 
 
+"""
 function vrr(aexpn::Float64,ax::Float64,ay::Float64,az::Float64,aI::Int64,aJ::Int64,aK::Int64,
         bexpn::Float64,bx::Float64,by::Float64,bz::Float64,
         cexpn::Float64,cx::Float64,cy::Float64,cz::Float64,cI::Int64,cJ::Int64,cK::Int64,

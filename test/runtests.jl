@@ -2,6 +2,8 @@ push!(LOAD_PATH, "../src")
 
 using Quante
 
+include("vrrspeedtest.jl")
+
 function microtest() # collection of microscopic tests, within scope of functions
     Quante.test_utils()
     Quante.test_pgbf()
@@ -25,12 +27,12 @@ microtest()
 
 # OK! Let's try the full blown restricted Hartree Fock...
 function test_h2()
-    @time Energy, E, U = rhf(Quante.h2)
+    @time Energy, E, U = rhf(Quante.h2,verbose=true)
     @assert isapprox(Energy,-1.1170996)
 end
 
 function test_lih()
-    @time Energy, E, U = rhf(Quante.lih)
+    @time Energy, E, U = rhf(Quante.lih,verbose=true)
     @assert isapprox(Energy,-7.86073270525799)
 end
 
@@ -40,6 +42,5 @@ function test_h2o()
 end
 
 test_h2()
-test_lih()
 test_h2o()
-
+test_lih()
