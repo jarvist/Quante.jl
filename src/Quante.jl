@@ -4,7 +4,7 @@ A fork of PqQuante in Julia; experimenting with quantum chemistry in the Julia l
 
 """
 
-module quante
+module Quante
 
 include("utility.jl")
 include("gamma.jl")
@@ -22,5 +22,5 @@ include("hrr.jl")
 
 include("rhf.jl")
 
-end
+end # module
 
