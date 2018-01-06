@@ -43,7 +43,7 @@ end
 dmat(U::Array{Float64,2},nocc::Int64) = U[:,1:nocc]*U[:,1:nocc]'
 
 
-function rhf(mol::Molecule,MaxIter::Int64=8,verbose::Bool=false)
+function rhf(mol::Molecule,MaxIter::Int64=8; verbose::Bool=false)
     bfs = build_basis(mol)
     S,T,V = all_1e_ints(bfs,mol)
     Ints = all_twoe_ints(bfs)

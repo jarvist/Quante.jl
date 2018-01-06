@@ -15,18 +15,6 @@ function push!(mol::Molecule,at::Atom)
     Base.push!(atomlist,at)
 end
 
-tobohr(x::Float64) = x/0.52918
-function tobohr!(at::Atom)
-    at.x /= 0.52918
-    at.y /= 0.52918
-    at.z /= 0.52918
-end
-function tobohr!(mol::Molecule)
-    for at in mol.atomlist
-        tobohr!(at)
-    end
-end
-
 nuclear_repulsion(a::Atom,b::Atom)= a.atno*b.atno/sqrt(dist2(a.x-b.x,a.y-b.y,a.z-b.z))
 function nuclear_repulsion(mol::Molecule)
     nr = 0
@@ -44,9 +32,23 @@ nat(mol::Molecule) = length(mol.atomlist)
 # center_of_mass, center!
 
 # Array of symbols, masses
+# First we need to dereference atom name to atomic charge (Z)
+AtoZ=Dict(j=>i for (i,j) in enumerate(["H","He",
+    "Li","Be","B","C","N","O","F","Ne",
+    "Na","Mg","Al","Si","P","S","Cl","Ar",
+    "K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr",
+    "Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe",
+    "Cs","Ba","La",
+    "Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu",
+    "Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn",
+    "Fr","Ra","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm","Md","No","Lr",
+    "Rf","Db","Sg","Bh","Hs","Mt","Ds","Rg","Cn","Nh","Fl","Mc","Lv","Ts","Og"]))
+# Magic comprehension ends up like:
+# ZfromAtom = Dict("H" => 1, "He" => 2, "Li" => 3)
 
 
 # Sample molecules for tests
+# All units currently Angstrom; converted into Bohr below
 h2 = Molecule([Atom(1,  0.00000000,     0.00000000,     0.36628549),
                Atom(1,  0.00000000,     0.00000000,    -0.36628549)])
 
@@ -77,6 +79,18 @@ lih = Molecule([Atom(3,    0.00000000,     0.00000000,    -0.53999756),
                 Atom(1,    0.00000000,     0.00000000,     1.08999756)])
 
 # Convert to atomic units (bohr)
+tobohr(x::Float64) = x/0.52918 # These assume units start as Angstrom.
+function tobohr!(at::Atom)
+    at.x /= 0.52918
+    at.y /= 0.52918
+    at.z /= 0.52918
+end
+function tobohr!(mol::Molecule)
+    for at in mol.atomlist
+        tobohr!(at)
+    end
+end
+
 tobohr!(h2)
 tobohr!(h2o)
 tobohr!(ch4)
