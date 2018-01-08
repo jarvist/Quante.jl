@@ -1,3 +1,20 @@
+# Horizontal and Vertical Recurrance Relationship of Head-Gordon and Pople
+#
+# A method for two-electron Gaussian integral and integral derivative evaluation using recurrence relations
+# Martin Head-Gordon and John A. Pople
+# Department of Chemistry, Carnegie-Mellon University, Pittsburgh, Pennsylvania 15213 (Received 26 May 1988; accepted 20 July 1988)
+
+# An efficient method is presented for evaluating two-electron Cartesian
+# Gaussian integrals, and their first derivatives with respect to nuclear
+# coordinates. It is based on the recurrence relation (RR) of Obara and Saika
+# [J. Chem. Phys. 84, 3963 (1986)], and an additional new RR, which are
+# combined together in a general algorithm applicable to any angular momenta.
+# This algorithm exploits the fact that the new RR can be applied outside
+# contraction loops. It is shown, by floating point operation counts and
+# comparative timings, to be generally superior to existing methods,
+# particularly for basis sets containing d functions.
+#  https://doi.org/10.1063/1.455553
+
 function hrr(aexpn::Float64,ax::Float64,ay::Float64,az::Float64,aI::Int64,aJ::Int64,aK::Int64,
     bexpn::Float64,bx::Float64,by::Float64,bz::Float64,bI::Int64,bJ::Int64,bK::Int64,
     cexpn::Float64,cx::Float64,cy::Float64,cz::Float64,cI::Int64,cJ::Int64,cK::Int64,
