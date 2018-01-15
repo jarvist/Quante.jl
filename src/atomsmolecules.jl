@@ -1,6 +1,6 @@
 # ## Atoms and Molecules
 
-export AtoBohr, Atom, Molecule, AtoZ
+export AtoBohr!, Atom, Molecule, AtoZ
 
 type Atom
     atno::Int64

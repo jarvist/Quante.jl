@@ -2,6 +2,7 @@ push!(LOAD_PATH, "../src")
 
 using Quante
 
+#include("C60.jl")
 include("SzaboOstlundReference.jl") # further references from Szabo and Ostlund
 #include("vrrspeedtest.jl") # speed test of two-matrix integrals
 
