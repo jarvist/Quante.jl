@@ -42,8 +42,14 @@ end
 
 dmat(U::Array{Float64,2},nocc::Int64) = U[:,1:nocc]*U[:,1:nocc]'
 
+"""
+ rhf
 
-function rhf(mol::Molecule,MaxIter::Int64=8; verbose::Bool=false)
+Restricted Hartree-Fock function. Will run a self-consistent field (SCF)
+calculation on the supplied molecular geometry.
+
+"""
+function rhf(mol::Molecule,MaxIter::Int64=40; verbose::Bool=false, Econvergence::Float64=1e-6)
     bfs = build_basis(mol)
     S,T,V = all_1e_ints(bfs,mol)
     Ints = all_twoe_ints(bfs)
@@ -63,6 +69,7 @@ function rhf(mol::Molecule,MaxIter::Int64=8; verbose::Bool=false)
         println("U: $U")
         println("2e ints:\n$Ints")
     end
+    println("SCF: Iteration TotalEnergy :=: Enuke + Eone + Etwo")
     for iter in 1:MaxIter
         D = dmat(U,nclosed)
         if verbose
@@ -75,7 +82,7 @@ function rhf(mol::Molecule,MaxIter::Int64=8; verbose::Bool=false)
         Etwo = trace2(D,H)
         Energy = Enuke + Eone + Etwo
         println("HF: $iter  $Energy : $Enuke    $Eone    $Etwo")
-        if isapprox(Energy,Eold)
+        if abs(Energy-Eold)<Econvergence
             break
         end
         Eold  = Energy
