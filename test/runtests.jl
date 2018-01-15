@@ -2,7 +2,8 @@ push!(LOAD_PATH, "../src")
 
 using Quante
 
-include("vrrspeedtest.jl")
+include("SzaboOstlundReference.jl") # further references from Szabo and Ostlund
+#include("vrrspeedtest.jl") # speed test of two-matrix integrals
 
 function microtest() # collection of microscopic tests, within scope of functions
     Quante.test_utils()
@@ -26,17 +27,17 @@ end
 microtest()
 
 # OK! Let's try the full blown restricted Hartree Fock...
-function test_h2()
+function test_h2() # via PyQuante
     @time Energy, E, U = rhf(Quante.h2,verbose=true)
     @assert isapprox(Energy,-1.1170996)
 end
 
-function test_lih()
+function test_lih() # via PyQuante
     @time Energy, E, U = rhf(Quante.lih,verbose=true)
     @assert isapprox(Energy,-7.86073270525799)
 end
 
-function test_h2o()
+function test_h2o() # via PyQuante
     @time Energy,E,U = rhf(Quante.h2o)
     @assert isapprox(Energy,-74.9597609118851)
 end

@@ -1,5 +1,7 @@
 # ## Atoms and Molecules
 
+export AtoBohr, Atom, Molecule, AtoZ
+
 type Atom
     atno::Int64
     x::Float64
@@ -47,7 +49,7 @@ AtoZ=Dict(j=>i for (i,j) in enumerate(["H","He",
 # ZfromAtom = Dict("H" => 1, "He" => 2, "Li" => 3)
 
 
-# Sample molecules for tests
+# Sample molecules for tests - all from PyQuante
 # All units currently Angstrom; converted into Bohr below
 h2 = Molecule([Atom(1,  0.00000000,     0.00000000,     0.36628549),
                Atom(1,  0.00000000,     0.00000000,    -0.36628549)])
@@ -79,21 +81,21 @@ lih = Molecule([Atom(3,    0.00000000,     0.00000000,    -0.53999756),
                 Atom(1,    0.00000000,     0.00000000,     1.08999756)])
 
 # Convert to atomic units (bohr)
-tobohr(x::Float64) = x/0.52918 # These assume units start as Angstrom.
-function tobohr!(at::Atom)
+AtoBohr(x::Float64) = x/0.52918 # These assume units start as Angstrom.
+function AtoBohr!(at::Atom)
     at.x /= 0.52918
     at.y /= 0.52918
     at.z /= 0.52918
 end
-function tobohr!(mol::Molecule)
+function AtoBohr!(mol::Molecule)
     for at in mol.atomlist
-        tobohr!(at)
+        AtoBohr!(at)
     end
 end
 
-tobohr!(h2)
-tobohr!(h2o)
-tobohr!(ch4)
-tobohr!(c6h6)
-tobohr!(lih)
+AtoBohr!(h2)
+AtoBohr!(h2o)
+AtoBohr!(ch4)
+AtoBohr!(c6h6)
+AtoBohr!(lih)
 
