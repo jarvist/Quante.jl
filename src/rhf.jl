@@ -77,7 +77,7 @@ function rhf(mol::Molecule,MaxIter::Int64=40; verbose::Bool=false, Econvergence:
     # Define occupied and virtual orbitals
     nclosed,nopen = divrem(nel(mol),2)
     D=densitymatrix(U,nclosed) # initial density matrix
-    Eold = 0
+    Eold = Inf 
     Energy = 0
     println("Nel=$(nel(mol)) Nclosed=$nclosed")
     if verbose
@@ -103,10 +103,10 @@ function rhf(mol::Molecule,MaxIter::Int64=40; verbose::Bool=false, Econvergence:
         H = h+G
         # Diagonalise the Fock Matrix ; eig=Generalised eigenvalue decomposition
         E,U = eig(H,S)
-        # Extract contributions to total energy
-        Eone = trace2(D,h)
-        Etwo = trace2(D,H)
-        Energy = Enuke + Eone + Etwo
+        # expanded versions of trace2 functions
+        Eone = sum(D.*h) # one electron contribution
+        Etwo = sum(D.*H) # should be = sum of occupied Fock orbitals
+        Energy = Enuke + Eone + Etwo #c.f. Thijssen, factor of 2 already taken care of?
         println("HF: $iter  $Energy : $Enuke    $Eone    $Etwo")
         if abs(Energy-Eold)<Econvergence
             break

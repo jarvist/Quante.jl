@@ -81,11 +81,11 @@ lih = Molecule([Atom(3,    0.00000000,     0.00000000,    -0.53999756),
                 Atom(1,    0.00000000,     0.00000000,     1.08999756)])
 
 # Convert to atomic units (bohr)
-AtoBohr(x::Float64) = x/0.52918 # These assume units start as Angstrom.
+AtoBohr(x::Float64) = x*BohrInA # These assume units start as Angstrom.
 function AtoBohr!(at::Atom)
-    at.x /= 0.52918
-    at.y /= 0.52918
-    at.z /= 0.52918
+    at.x *= BohrInA
+    at.y *= BohrInA 
+    at.z *= BohrInA
 end
 function AtoBohr!(mol::Molecule)
     for at in mol.atomlist
