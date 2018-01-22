@@ -24,6 +24,14 @@ function all_twoe_ints(bflist,ERI=coulomb)
     return ints2e
 end
 
+"""
+ make2JmK
+
+ Coulomb and exchange contribution to the Fock matrix. 
+ The N^4 component of Hartree Fock.
+
+ TODO: Optimise me :^)
+"""
 function make2JmK(D::Array{Float64,2},Ints::Array{Float64,1})
     n = size(D,1)
     G = Array{Float64}(n,n)
@@ -40,7 +48,7 @@ function make2JmK(D::Array{Float64,2},Ints::Array{Float64,1})
     return G
 end
 
-dmat(U::Array{Float64,2},nocc::Int64) = U[:,1:nocc]*U[:,1:nocc]'
+densitymatrix(U::Array{Float64,2},nocc::Int64) = U[:,1:nocc]*U[:,1:nocc]'
 
 """
  rhf
@@ -48,15 +56,27 @@ dmat(U::Array{Float64,2},nocc::Int64) = U[:,1:nocc]*U[:,1:nocc]'
 Restricted Hartree-Fock function. Will run a self-consistent field (SCF)
 calculation on the supplied molecular geometry.
 
+Algorithm (and comments herein) follow Thijssen 2007 2nd Ed pp70-73
+
 """
 function rhf(mol::Molecule,MaxIter::Int64=40; verbose::Bool=false, Econvergence::Float64=1e-6)
     bfs = build_basis(mol)
+    # S = Overlap matrix
+    # T = one-electron Kinetic Energy
+    # V = one-electron potential
     S,T,V = all_1e_ints(bfs,mol)
+    # Ints = two-electron integrals, <pr|g|qs>
     Ints = all_twoe_ints(bfs)
+    # h = Form one-eletron Hamiltonian
     h = T+V
+    # generalised eigenvalue decomposition of one-electron hamiltonian and overlap matrix 
+    # used as starting guess for self-consistent procedure?
     E,U = eig(h,S)
+    # Enuke = (classical) nuclear repulision
     Enuke = nuclear_repulsion(mol)
+    # Define occupied and virtual orbitals
     nclosed,nopen = divrem(nel(mol),2)
+    D=densitymatrix(U,nclosed) # initial density matrix
     Eold = 0
     Energy = 0
     println("Nel=$(nel(mol)) Nclosed=$nclosed")
@@ -71,13 +91,19 @@ function rhf(mol::Molecule,MaxIter::Int64=40; verbose::Bool=false, Econvergence:
     end
     println("SCF: Iteration TotalEnergy :=: Enuke + Eone + Etwo")
     for iter in 1:MaxIter
-        D = dmat(U,nclosed)
+        const α=0.4 # mixing of current and prior density matrices
+        D = α*D + (1-α)*densitymatrix(U,nclosed) # density matrix; from eigenvalues U
         if verbose
             println("D=\n$D")
         end
+        # Coulomb and Exchange contributions to Fock Matrix:
+        # This is the N^4, and most time consuming, step of Hartree Fock.
         G = make2JmK(D,Ints)
+        # Fock matrix H = one-electron hamiltonian + G matrix
         H = h+G
+        # Diagonalise the Fock Matrix ; eig=Generalised eigenvalue decomposition
         E,U = eig(H,S)
+        # Extract contributions to total energy
         Eone = trace2(D,h)
         Etwo = trace2(D,H)
         Energy = Enuke + Eone + Etwo
