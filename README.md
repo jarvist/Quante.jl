@@ -16,7 +16,7 @@ parallelisation and GPU execution, from high level constructions.
 
 ### ToDo
 
-- [ ] Debug H2O / LiF RHF energy error
+- [x] Debug H2O / LiF RHF energy error
 - [ ] Add CCSD 'explicit forloops' - see Psi4Numpy
   https://github.com/psi4/psi4numpy/blob/master/Coupled-Cluster/CCSD.py
 - [ ] Add CCSD 'Tensor contractions' - via
