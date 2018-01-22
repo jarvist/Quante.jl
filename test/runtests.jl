@@ -35,14 +35,17 @@ end
 
 function test_lih() # via PyQuante
     @time Energy, E, U = rhf(Quante.lih,verbose=true)
-    @assert isapprox(Energy,-7.86073270525799)
+    @assert isapprox(Energy,-7.860745582058085) #-7.86073270525799) <-- old PyQuante version
 end
 
 function test_h2o() # via PyQuante
     @time Energy,E,U = rhf(Quante.h2o)
-    @assert isapprox(Energy,-74.9597609118851)
+    @assert isapprox(Energy,-74.9598566070913) #-74.9597609118851) <-- old PyQuante version
 end
 
+println("Testing simple molecules, sto-3g energy...")
 test_h2()
 test_h2o()
 test_lih()
+
+println("All tests passed! 8^)")
