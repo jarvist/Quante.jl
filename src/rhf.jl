@@ -14,7 +14,7 @@ function all_1e_ints(bfs::BasisSet,mol::Molecule)
     return S,T,V
 end
 
-function all_twoe_ints(bflist,ERI=coulomb)
+function all_twoe_ints(bflist,ERI=coulomb_hgp) #coloumb)
     n = length(bflist.bfs)
     totlen = div(n*(n+1)*(n*n+n+2),8)
     ints2e = Array{Float64}(totlen)
