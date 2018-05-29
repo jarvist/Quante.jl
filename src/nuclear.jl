@@ -34,7 +34,7 @@ function nuclear_attraction(aexpn::Float64,ax::Float64,ay::Float64,az::Float64,
     Ax = Aarray(aI,bI,px-ax,px-bx,px-cx,gamma)
     Ay = Aarray(aJ,bJ,py-ay,py-by,py-cy,gamma)
     Az = Aarray(aK,bK,pz-az,pz-bz,pz-cz,gamma)
-    total = 0
+    total = 0.0
     for I in 0:(aI+bI)
         for J in 0:(aJ+bJ)
             for K in 0:(aK+bK)

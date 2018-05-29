@@ -67,7 +67,7 @@ Atom( 6 , -0.683527 , 2.941108 , -1.817704)
 
 AtoBohr!(C60) # convert from Angstrom to Bohr
 
-@time Energy,E,U = rhf(C60)
+@time Energy,E,U = rhf(C60,verbose=true)
 println("C60 Energy: $Energy")
 
 

@@ -1,6 +1,9 @@
 export rhf
 
-function all_1e_ints(bfs::BasisSet,mol::Molecule)
+"""
+1e integrals; single core version. 
+"""
+function all_1e_ints_singlecore(bfs::BasisSet,mol::Molecule)
     n = length(bfs.bfs)
     S = Array{Float64}(n,n)
     T = Array{Float64}(n,n)
@@ -14,12 +17,49 @@ function all_1e_ints(bfs::BasisSet,mol::Molecule)
     return S,T,V
 end
 
-function all_twoe_ints(bflist,ERI=coulomb_hgp) #coloumb)
+function all_1e_ints(bfs::BasisSet,mol::Molecule)
+    n = length(bfs.bfs)
+    S = SharedArray{Float64}(n,n)
+    T = SharedArray{Float64}(n,n)
+    V = SharedArray{Float64}(n,n)
+    @sync @parallel for i = 1:n 
+        @parallel for j = 1:i 
+    #for (i,j) in pairs(n)
+        a,b = bfs.bfs[i],bfs.bfs[j]
+        S[i,j] = S[j,i] = overlap(a,b)
+        T[i,j] = T[j,i] = kinetic(a,b)
+        V[i,j] = V[j,i] = nuclear_attraction(a,b,mol)
+        end
+    end
+    return S,T,V
+end
+
+"""
+2e integrals; single core version.
+"""
+function all_2e_ints_singlecore(bflist,ERI=coulomb_hgp) 
     n = length(bflist.bfs)
     totlen = div(n*(n+1)*(n*n+n+2),8)
-    ints2e = Array{Float64}(totlen)
+    ints2e = SharedArray{Float64}(totlen)
     for (i,j,k,l) in iiterator(n)
         ints2e[iindex(i,j,k,l)] = ERI(bflist.bfs[i],bflist.bfs[j],bflist.bfs[k],bflist.bfs[l])
+    end
+    return ints2e
+end
+
+function all_2e_ints(bflist,ERI=coulomb_hgp) #coloumb
+    n = length(bflist.bfs)
+    totlen = div(n*(n+1)*(n*n+n+2),8)
+    ints2e = SharedArray{Float64}(totlen)
+    #for (i,j,k,l) in iiterator(n)
+    @sync @parallel for i=1:n
+        @parallel for j=1:i 
+            for (k,l) in pairs(n) 
+                if triangle(i,j) <= triangle(k,l)
+                    ints2e[iindex(i,j,k,l)] = ERI(bflist.bfs[i],bflist.bfs[j],bflist.bfs[k],bflist.bfs[l])
+                end
+            end
+        end 
     end
     return ints2e
 end
@@ -31,8 +71,9 @@ end
  The N^4 component of Hartree Fock.
 
  TODO: Optimise me :^)
+ Nb: Requires as Array; not SharedArray as it flattens it for the Ints[]access.
 """
-function make2JmK(D::Array{Float64,2},Ints::Array{Float64,1})
+function make2JmK(D::Array{Float64,2},Ints::SharedArray{Float64,1})
     n = size(D,1)
     G = Array{Float64}(n,n)
     D1 = reshape(D,n*n)
@@ -60,13 +101,17 @@ Algorithm (and comments herein) follow Thijssen 2007 2nd Ed pp70-73
 
 """
 function rhf(mol::Molecule,MaxIter::Int64=40; verbose::Bool=false, Econvergence::Float64=1e-6)
+    if verbose println("Building basis") end
     bfs = build_basis(mol)
+    if verbose println(length(bfs.bfs)," basis functions") end
     # S = Overlap matrix
     # T = one-electron Kinetic Energy
     # V = one-electron potential
+    if verbose println("Calculating 1e ints") end
     S,T,V = all_1e_ints(bfs,mol)
     # Ints = two-electron integrals, <pr|g|qs>
-    Ints = all_twoe_ints(bfs)
+    if verbose println("Calculating 2e ints") end
+    Ints = all_2e_ints(bfs)
     # h = Form one-eletron Hamiltonian
     h = T+V
     # generalised eigenvalue decomposition of one-electron hamiltonian and overlap matrix 
