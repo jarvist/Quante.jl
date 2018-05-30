@@ -23,7 +23,7 @@ function all_1e_ints(bfs::BasisSet,mol::Molecule)
     T = SharedArray{Float64}(n,n)
     V = SharedArray{Float64}(n,n)
     @sync @parallel for i = 1:n 
-        @parallel for j = 1:i 
+        @sync @parallel for j = 1:i 
     #for (i,j) in pairs(n)
         a,b = bfs.bfs[i],bfs.bfs[j]
         S[i,j] = S[j,i] = overlap(a,b)
@@ -52,8 +52,8 @@ function all_2e_ints(bflist,ERI=coulomb_hgp) #coloumb
     totlen = div(n*(n+1)*(n*n+n+2),8)
     ints2e = SharedArray{Float64}(totlen)
     #for (i,j,k,l) in iiterator(n)
-    @sync @parallel for i=1:n
-        @parallel for j=1:i 
+    @sync @parallel for i=1:n # Nb: need sync on both these parallel, to force completion of Ints before SCF
+        @sync @parallel for j=1:i 
             for (k,l) in pairs(n) 
                 if triangle(i,j) <= triangle(k,l)
                     ints2e[iindex(i,j,k,l)] = ERI(bflist.bfs[i],bflist.bfs[j],bflist.bfs[k],bflist.bfs[l])
@@ -71,7 +71,7 @@ end
  The N^4 component of Hartree Fock.
 
  TODO: Optimise me :^)
- Nb: Requires as Array; not SharedArray as it flattens it for the Ints[]access.
+ Nb: Now accepts SharedArray (parallel constructed) Ints 
 """
 function make2JmK(D::Array{Float64,2},Ints::SharedArray{Float64,1})
     n = size(D,1)

@@ -4,7 +4,7 @@ using Quante
 
 #include("C60.jl")
 include("SzaboOstlundReference.jl") # further references from Szabo and Ostlund
-#include("vrrspeedtest.jl") # speed test of two-matrix integrals
+#include("vrrspeedtest.jl") # speed test of two-centre integrals
 
 function microtest() # collection of microscopic tests, within scope of functions
     Quante.test_utils()

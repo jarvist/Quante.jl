@@ -67,7 +67,7 @@ function vrr(aexpn::Float64,ax::Float64,ay::Float64,az::Float64,aI::Int64,aJ::In
     wx,wy,wz = gaussian_product_center(zeta,px,py,pz,eta,qx,qy,qz)
     #println("P: $px,$py,$pz, Q: $qx,$qy,$qz, W: $wx,$wy,$wz, $zeta,$eta")
     
-    val = 0.0
+    val::Float64 = 0.0
     if cK>0
         val = (qz-cz)*vrr(aexpn,ax,ay,az,aI,aJ,aK,bexpn,bx,by,bz,
             cexpn,cx,cy,cz,cI,cJ,cK-1,dexpn,dx,dy,dz,m) +
