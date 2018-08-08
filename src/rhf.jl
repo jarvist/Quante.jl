@@ -47,11 +47,12 @@ function all_2e_ints_singlecore(bflist,ERI=coulomb_hgp)
     return ints2e
 end
 
-function all_2e_ints(bflist,ERI=coulomb_hgp) #coloumb
+function all_2e_ints(bflist,ERI=coulomb_hgp;verbose::Bool=false) #coloumb
     n = length(bflist.bfs)
     totlen = div(n*(n+1)*(n*n+n+2),8)
     ints2e = SharedArray{Float64}(totlen)
     #for (i,j,k,l) in iiterator(n)
+    if verbose println(n^4/4," ints to calculate. Each '.' is ",n^2/2) end
     @sync @parallel for i=1:n # Nb: need sync on both these parallel, to force completion of Ints before SCF
         @sync @parallel for j=1:i 
             for (k,l) in pairs(n) 
@@ -59,6 +60,7 @@ function all_2e_ints(bflist,ERI=coulomb_hgp) #coloumb
                     ints2e[iindex(i,j,k,l)] = ERI(bflist.bfs[i],bflist.bfs[j],bflist.bfs[k],bflist.bfs[l])
                 end
             end
+            if verbose print(".") end
         end 
     end
     return ints2e
@@ -111,7 +113,7 @@ function rhf(mol::Molecule,MaxIter::Int64=40; verbose::Bool=false, Econvergence:
     S,T,V = all_1e_ints(bfs,mol)
     # Ints = two-electron integrals, <pr|g|qs>
     if verbose println("Calculating 2e ints") end
-    Ints = all_2e_ints(bfs)
+    Ints = all_2e_ints(bfs,verbose=verbose)
     # h = Form one-eletron Hamiltonian
     h = T+V
     # generalised eigenvalue decomposition of one-electron hamiltonian and overlap matrix 

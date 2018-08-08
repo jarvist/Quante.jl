@@ -6,6 +6,11 @@ A fork of PqQuante in Julia; experimenting with quantum chemistry in the Julia l
 
 module Quante
 
+using Distributed
+using SharedArrays
+using LinearAlgebra
+using SpecialFunctions
+
 include("physicalconstants.jl")
 
 include("utility.jl")
