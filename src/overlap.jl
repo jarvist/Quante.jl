@@ -54,13 +54,15 @@ end
 
 
 function test_overlap()
+    @testset "test_overlap" begin
     s = pgbf(1.0)
     px = pgbf(1.0,0,0,0,1,0,0)
-    @assert overlap1d(0,0,0.,0.,1.) == 1
-    @assert gaussian_product_center(s,s) == [0,0,0]
-    @assert isapprox(overlap(s,s),1)
-    @assert isapprox(overlap(px,px),1)
-    @assert isapprox(overlap(s,px),0)
-    @assert binomial_prefactor(0,0,0,0.,0.) == 1
+    @test overlap1d(0,0,0.,0.,1.) == 1
+    @test gaussian_product_center(s,s) == [0,0,0]
+    @test isapprox(overlap(s,s),1)
+    @test isapprox(overlap(px,px),1)
+    @test isapprox(overlap(s,px),0)
+    @test binomial_prefactor(0,0,0,0.,0.) == 1
+    end #testset
 end
 

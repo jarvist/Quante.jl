@@ -1,6 +1,7 @@
 push!(LOAD_PATH, "../src")
 
-using Quante
+using Quante, Test
+@testset "Quante.jl" begin
 
 #include("C60.jl")
 include("SzaboOstlundReference.jl") # further references from Szabo and Ostlund
@@ -30,17 +31,17 @@ microtest()
 # OK! Let's try the full blown restricted Hartree Fock...
 function test_h2() # via PyQuante
     @time Energy, E, U = rhf(Quante.h2,verbose=true)
-    @assert isapprox(Energy,-1.1170996)
+    @test Energy ≈ -1.1170996
 end
 
 function test_lih() # via PyQuante
     @time Energy, E, U = rhf(Quante.lih,verbose=true)
-    @assert isapprox(Energy,-7.860745582058085) #-7.86073270525799) <-- old PyQuante version
+    @test Energy ≈ -7.860745582058085 #-7.86073270525799) <-- old PyQuante version
 end
 
 function test_h2o() # via PyQuante
     @time Energy,E,U = rhf(Quante.h2o)
-    @assert isapprox(Energy,-74.9598566070913) #-74.9597609118851) <-- old PyQuante version
+    @test Energy ≈ -74.9598566070913 #-74.9597609118851) <-- old PyQuante version
 end
 
 println("Testing simple molecules, sto-3g energy...")
@@ -48,4 +49,6 @@ test_h2()
 test_h2o()
 test_lih()
 
+end # testset
 println("All tests passed! 8^)")
+

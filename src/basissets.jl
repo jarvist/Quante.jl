@@ -157,31 +157,33 @@ const sym2power = Dict(
 
 
 function test_geo_basis()
-    @assert isapprox(nuclear_repulsion(h2),0.7223600367)
-    @assert nel(h2) == 2
-    @assert nel(h2o) == 10
-    @assert length(sto3g)==10
+    @testset "test_geo_basis" begin
+    @test nuclear_repulsion(h2) ≈ 0.7223600367
+    @test nel(h2) == 2
+    @test nel(h2o) == 10
+    @test length(sto3g)==10
     bfs = build_basis(h2)
-    @assert length(bfs.bfs)==2
+    @test length(bfs.bfs)==2
     l,r = bfs.bfs
-    @assert isapprox(overlap(l,l),1)
-    @assert isapprox(overlap(r,r),1)
-    @assert isapprox(overlap(l,r),0.6647387449282997)
-    @assert isapprox(kinetic(l,l),0.76003188)
-    @assert isapprox(kinetic(r,r),0.76003188)
-    @assert isapprox(kinetic(l,r),0.24141861181119084)
-    @assert isapprox(coulomb(l,l,l,l), 0.7746059439196398)
-    @assert isapprox(coulomb(r,r,r,r), 0.7746059439196398)
-    @assert isapprox(coulomb(l,l,r,r), 0.5727937653511646)
-    @assert isapprox(coulomb(l,l,l,r), 0.4488373301593464)
-    @assert isapprox(coulomb(l,r,l,r), 0.3025451156654606)
+    @test overlap(l,l)      ≈ 1
+    @test overlap(r,r)      ≈ 1
+    @test overlap(l,r)      ≈ 0.6647387449282997
+    @test kinetic(l,l)      ≈ 0.76003188
+    @test kinetic(r,r)      ≈ 0.76003188
+    @test ikinetic(l,r)      ≈ 0.24141861181119084
+    @test coulomb(l,l,l,l)  ≈ 0.7746059439196398
+    @test coulomb(r,r,r,r)  ≈ 0.7746059439196398
+    @test coulomb(l,l,r,r)  ≈ 0.5727937653511646
+    @test coulomb(l,l,l,r)  ≈ 0.4488373301593464
+    @test coulomb(l,r,l,r)  ≈ 0.3025451156654606
     bfs = build_basis(h2o)
 
     s1,s2,px,py,pz,hl,hr = bfs.bfs
-    @assert isapprox(coulomb(s1,s2,hl,hr),0.03855344493645537)
-    @assert isapprox(coulomb(s1,pz,hl,hr),-0.0027720110485359053)
-    @assert isapprox(coulomb(s1,hl,pz,hr),-0.010049491284827426)
-    @assert coulomb(s1,py,hl,hr)==0
-    @assert coulomb(s1,hl,py,hr)==0
+    @test coulomb(s1,s2,hl,hr) ≈ 0.03855344493645537
+    @test coulomb(s1,pz,hl,hr) ≈ -0.0027720110485359053
+    @test coulomb(s1,hl,pz,hr) ≈ -0.010049491284827426
+    @test coulomb(s1,py,hl,hr)==0
+    @test coulomb(s1,hl,py,hr)==0
+    end #testset
 end
 

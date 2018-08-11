@@ -349,6 +349,7 @@ function vrr_iter(aexpn::Float64,ax::Float64,ay::Float64,az::Float64,aI::Int64,a
 end
 
 function test_vrr()
+    @testset "test_vrr" begin
     ax=ay=az=bx=by=bz=cx=cy=cz=dx=dy=dz=0.0
     aexpn=bexpn=cexpn=dexpn=1.0
     aI=aJ=aK=0
@@ -386,16 +387,18 @@ function test_vrr()
             cexpn,cx,cy,cz,cI,cJ,cK,dexpn,dx,dy,dz,M)
         val2 = vrr(cexpn,cx,cy,cz,cI,cJ,cK,dexpn,dx,dy,dz,
             aexpn,ax,ay,az,aI,aJ,aK,bexpn,bx,by,bz,M)
-        @assert isapprox(val1,val2)
-        @assert isapprox(val1,result)
+        @test val1 ≈ val2
+        @test val1 ≈ result
         val3 = vrr_iter(aexpn,ax,ay,az,aI,aJ,aK,bexpn,bx,by,bz,
             cexpn,cx,cy,cz,cI,cJ,cK,dexpn,dx,dy,dz,M)
         val4 = vrr_iter(cexpn,cx,cy,cz,cI,cJ,cK,dexpn,dx,dy,dz,
             aexpn,ax,ay,az,aI,aJ,aK,bexpn,bx,by,bz,M)
     end
+    end# testset
 end
 
 function test_hrr()
+    @testset "test_hrr" begin
     ax=ay=az=bx=by=bz=cx=cy=cz=dx=dy=dz=0.0
     aexpn=bexpn=cexpn=dexpn=1.0
     aI=aJ=aK=0
@@ -436,8 +439,9 @@ function test_hrr()
             cexpn,cx,cy,cz,cI,cJ,cK,dexpn,dx,dy,dz,dI,dJ,dK)
         val2 = hrr(cexpn,cx,cy,cz,cI,cJ,cK,dexpn,dx,dy,dz,dI,dJ,dK,
             aexpn,ax,ay,az,aI,aJ,aK,bexpn,bx,by,bz,bI,bJ,bK)
-        @assert isapprox(val1,val2)
-        @assert isapprox(val1,result)
+        @test val1 ≈ val2
+        @test val1 ≈ result
     end
+    end #testset
 end
 

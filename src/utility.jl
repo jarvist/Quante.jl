@@ -14,12 +14,14 @@ iindex(i::Int64,j::Int64,k::Int64,l::Int64) = triangle(triangle(i,j),triangle(k,
 trace2(A,B) = sum(A.*B)
 
 function test_utils()
-    @assert factorial2(6)==48
-    @assert collect(pairs(3)) == [(1,1),(2,1),(2,2),(3,1),(3,2),(3,3)]
-    @assert collect(spairs(3))== [(2,1),(3,1),(3,2)]
-    @assert collect(rpairs(2)) == [(1,1),(1,2),(2,1),(2,2)]
-    @assert iindex(1,1,1,1) == 1
-    @assert iindex(1,1,1,2) == iindex(1,1,2,1) == iindex(1,2,1,1) == iindex(2,1,1,1) == 2
-    @assert iindex(1,1,2,2) == iindex(2,2,1,1) == 4
+    @testset "test_utils" begin
+    @test factorial2(6)==48
+    @test collect(pairs(3)) == [(1,1),(2,1),(2,2),(3,1),(3,2),(3,3)]
+    @test collect(spairs(3))== [(2,1),(3,1),(3,2)]
+    @test collect(rpairs(2)) == [(1,1),(1,2),(2,1),(2,2)]
+    @test iindex(1,1,1,1) == 1
+    @test iindex(1,1,1,2) == iindex(1,1,2,1) == iindex(1,2,1,1) == iindex(2,1,1,1) == 2
+    @test iindex(1,1,2,2) == iindex(2,2,1,1) == 4
+    end #testset
 end
 

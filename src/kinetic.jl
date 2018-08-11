@@ -26,12 +26,14 @@ kinetic(a::CGBF,b::CGBF) = contract(kinetic,a,b)
 
 
 function test_kinetic()
+    @testset "test_kinetic" begin
     s = pgbf(1.0)
     c = cgbf(0.0,0.0,0.0)
     push!(c,1,1)
-    @assert isapprox(amplitude(c,0,0,0),0.71270547)
-    @assert isapprox(kinetic(1.,0.,0.,0.,0,0,0,1.,0.,0.,0.,0,0,0),2.9530518648229536)
-    @assert isapprox(kinetic(s,s),1.5)
-    @assert isapprox(kinetic(c,c),1.5)
+    @test amplitude(c,0,0,0) ≈ 0.71270547
+    @test kinetic(1.,0.,0.,0.,0,0,0,1.,0.,0.,0.,0,0,0) ≈ 2.9530518648229536
+    @test kinetic(s,s) ≈ 1.5
+    @test kinetic(c,c) ≈ 1.5
+    end #testset
 end
 

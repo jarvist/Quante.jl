@@ -70,27 +70,31 @@ function nuclear_attraction(a::CGBF,b::CGBF,m::Molecule)
 end
 
 function test_a_terms()
-    @assert Aterm(0,0,0,0,0,0.,0.,0.,0.) == 1.0
-    @assert Aarray(0,0,0.,0.,0.,1.) == [1.0]
-    @assert Aarray(0,1,1.,1.,1.,1.) == [1.0, -1.0]
-    @assert Aarray(1,1,1.,1.,1.,1.) == [1.5, -2.5, 1.0]
-    @assert Aterm(0,0,0,0,0,0.,0.,0.,1.) == 1.0
-    @assert Aterm(0,0,0,0,1,1.,1.,1.,1.) == 1.0
-    @assert Aterm(1,0,0,0,1,1.,1.,1.,1.) == -1.0
-    @assert Aterm(0,0,0,1,1,1.,1.,1.,1.) == 1.0
-    @assert Aterm(1,0,0,1,1,1.,1.,1.,1.) == -2.0
-    @assert Aterm(2,0,0,1,1,1.,1.,1.,1.) == 1.0
-    @assert Aterm(2,0,1,1,1,1.,1.,1.,1.) == -0.5
-    @assert Aterm(2,1,0,1,1,1.,1.,1.,1.) == 0.5
+    @testset "a_terms" begin
+    @test Aterm(0,0,0,0,0,0.,0.,0.,0.) == 1.0
+    @test Aarray(0,0,0.,0.,0.,1.) == [1.0]
+    @test Aarray(0,1,1.,1.,1.,1.) == [1.0, -1.0]
+    @test Aarray(1,1,1.,1.,1.,1.) == [1.5, -2.5, 1.0]
+    @test Aterm(0,0,0,0,0,0.,0.,0.,1.) == 1.0
+    @test Aterm(0,0,0,0,1,1.,1.,1.,1.) == 1.0
+    @test Aterm(1,0,0,0,1,1.,1.,1.,1.) == -1.0
+    @test Aterm(0,0,0,1,1,1.,1.,1.,1.) == 1.0
+    @test Aterm(1,0,0,1,1,1.,1.,1.,1.) == -2.0
+    @test Aterm(2,0,0,1,1,1.,1.,1.,1.) == 1.0
+    @test Aterm(2,0,1,1,1,1.,1.,1.,1.) == -0.5
+    @test Aterm(2,1,0,1,1,1.,1.,1.,1.) == 0.5
+    end #testset
 end
 
 function test_na()
+    @testset "test_na" begin
     s = pgbf(1.0)
     c = cgbf(0.0,0.0,0.0)
     push!(c,1,1)
-    @assert isapprox(amplitude(c,0,0,0),0.71270547)
-    @assert isapprox(nuclear_attraction(s,s,0.,0.,0.),-1.59576912)
-    @assert isapprox(nuclear_attraction(c,c,0.,0.,0.),-1.59576912)
+    @test amplitude(c,0,0,0) ≈ 0.71270547
+    @test nuclear_attraction(s,s,0.,0.,0.) ≈ -1.59576912
+    @test nuclear_attraction(c,c,0.,0.,0.) ≈ -1.59576912
+    end #testset
 end
 #todo make into a test
 function test_one()
@@ -106,9 +110,11 @@ end
 
 
 function test_na2()
+    @testset test_na2 begin
     li,h = lih.atomlist
     bfs = build_basis(lih)
     s1,s2,x,y,z,h1s = bfs.bfs
-    @assert isapprox(nuclear_attraction(s1,s1,lih),-8.307532656)
+    @test nuclear_attraction(s1,s1,lih) ≈ -8.307532656
+    end #testset
 end
 

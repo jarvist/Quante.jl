@@ -87,22 +87,26 @@ coulomb(a::CGBF,b::CGBF,c::CGBF,d::CGBF) = contract(coulomb,a,b,c,d)
 
 
 function test_two_terms()
-    @assert fB(0,0,0,0.0,0.0,0.0,0,2.0) == 1
-    @assert fB(0,0,0,1.0,1.0,1.0,0,2.0) == 1
-    @assert fB(0,0,0,0.0,0.0,0.0,0,2.0 ) == 1
-    @assert fB(1,0,1,0.0,0.0,0.0,0,2.0 ) == 0.125
-    @assert B0(0,0,2.0) == 1
-    @assert fact_ratio2(0,0) == 1
-    @assert Bterm(0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,2.0,0.25)==1
-    @assert Bterm(0,1,0,0,0,0,0,0,1,0.0,0.0,0.0,0.0,0.0,0.0,2.0,2.0,0.25)==0
+    @testset "test_two_terms" begin
+    @test fB(0,0,0,0.0,0.0,0.0,0,2.0) == 1
+    @test fB(0,0,0,1.0,1.0,1.0,0,2.0) == 1
+    @test fB(0,0,0,0.0,0.0,0.0,0,2.0 ) == 1
+    @test fB(1,0,1,0.0,0.0,0.0,0,2.0 ) == 0.125
+    @test B0(0,0,2.0) == 1
+    @test fact_ratio2(0,0) == 1
+    @test Bterm(0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,2.0,0.25)==1
+    @test Bterm(0,1,0,0,0,0,0,0,1,0.0,0.0,0.0,0.0,0.0,0.0,2.0,2.0,0.25)==0
+    end #testset
 end
 
 
 function test_coul1()
+    @testset "test_coul1" begin
     s = pgbf(1.0)
     px = pgbf(1.0,0,0,0,1,0,0)
-    @assert coulomb(s,s,s,px)==0 # 0
-    @assert isapprox(coulomb(s,s,px,px), 0.9403159725793305 )
+    @test coulomb(s,s,s,px)==0 # 0
+    @test coulomb(s,s,px,px) ≈ 0.9403159725793305 
+    end #testset
 end
 
 function coulomb_hgp(a::PGBF,b::PGBF,c::PGBF,d::PGBF)

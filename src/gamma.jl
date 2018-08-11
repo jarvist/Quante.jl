@@ -72,29 +72,31 @@ end
 
 function test_gamma()
     # gammainc test functions. Test values taken from Mathematica
-    # println("a=0.5 test")
-    @assert maximum([gammainc(0.5,float(x)) for x in 0:10]
+    @testset "test_gamma" begin
+
+    @test maximum([gammainc(0.5,float(x)) for x in 0:10]
             -[0, 1.49365, 1.69181, 1.7471, 1.76416, 1.76968, 
                 1.77151, 1.77213, 1.77234, 1.77241, 1.77244]) < 1e-5
 
-    # println("a=1.5 test")
-    @assert maximum([gammainc(1.5,float(x)) for x in 0:10]
+    @test maximum([gammainc(1.5,float(x)) for x in 0:10]
             -[0, 1.49365, 1.69181, 1.7471, 1.76416, 1.76968, 
                 1.77151, 1.77213, 1.77234, 1.77241, 1.77244]) < 1e-5
-    # println("a=2.5 test")
-    @assert maximum([gammainc(2.5,float(x)) for x in 0:10]
+    @test maximum([gammainc(2.5,float(x)) for x in 0:10]
             -[0, 0.200538, 0.59898, 0.922271, 1.12165, 1.22933, 
                 1.2831, 1.30859, 1.32024, 1.32542, 1.32768]) < 1e-5
+    end #testset
 end
 
 function test_fgamma()
+    @testset "test_fgamma" begin
     for (x,res) in [(0.,1),
                     (30.,0.161802159),
                     (60.,0.114411404),
                     (90.,0.0934165203),
                     (120.,0.08090108),
                     (300.,0.051166336)]
-        @assert isapprox(res,Fgamma(0,x))
+        @test res ≈ Fgamma(0,x)
     end
+    end # testset
 end
 

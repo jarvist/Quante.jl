@@ -6,6 +6,7 @@ A fork of PqQuante in Julia; experimenting with quantum chemistry in the Julia l
 
 module Quante
 
+using Test # so we can have tests distributed in source
 using Distributed
 using SharedArrays
 using LinearAlgebra

@@ -118,7 +118,7 @@ function rhf(mol::Molecule,MaxIter::Int64=40; verbose::Bool=false, Econvergence:
     h = T+V
     # generalised eigenvalue decomposition of one-electron hamiltonian and overlap matrix 
     # used as starting guess for self-consistent procedure?
-    E,U = eig(h,S)
+    E,U = eigen(h,S)
     # Enuke = (classical) nuclear repulision
     Enuke = nuclear_repulsion(mol)
     # Define occupied and virtual orbitals

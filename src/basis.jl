@@ -88,18 +88,22 @@ end
 
 
 function test_pgbf()
+    @testset "test_pgbf" begin
     s = pgbf(1.0)
     px = pgbf(1.0,0,0,0,1,0,0)
-    @assert isapprox(amplitude(s,0,0,0),0.71270547)
-    @assert isapprox(amplitude(px,0,0,0),0)
+    @test amplitude(s,0,0,0) ≈ 0.71270547
+    @test amplitude(px,0,0,0) ≈ 0
+    end # testset
 end
 function test_cgbf()
+    @testset "test_cgbf" begin
     c = cgbf(0.0,0.0,0.0)
     push!(c,1,1)
-    @assert isapprox(amplitude(c,0,0,0),0.71270547)
+    @test amplitude(c,0,0,0) ≈ 0.71270547
     c2 = cgbf(0,0,0)
     push!(c2,1,0.2)
     push!(c2,0.5,0.2)
-    @assert isapprox(overlap(c2,c2),1)
+    @test overlap(c2,c2) ≈ 1
+    end # testset
 end
 
