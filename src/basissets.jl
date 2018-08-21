@@ -170,7 +170,7 @@ function test_geo_basis()
     @test overlap(l,r)      ≈ 0.6647387449282997
     @test kinetic(l,l)      ≈ 0.76003188
     @test kinetic(r,r)      ≈ 0.76003188
-    @test ikinetic(l,r)      ≈ 0.24141861181119084
+    @test kinetic(l,r)      ≈ 0.24141861181119084
     @test coulomb(l,l,l,l)  ≈ 0.7746059439196398
     @test coulomb(r,r,r,r)  ≈ 0.7746059439196398
     @test coulomb(l,l,r,r)  ≈ 0.5727937653511646

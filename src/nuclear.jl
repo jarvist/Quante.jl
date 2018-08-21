@@ -110,7 +110,7 @@ end
 
 
 function test_na2()
-    @testset test_na2 begin
+    @testset "test_na2" begin
     li,h = lih.atomlist
     bfs = build_basis(lih)
     s1,s2,x,y,z,h1s = bfs.bfs

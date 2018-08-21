@@ -1,6 +1,12 @@
 push!(LOAD_PATH, "../src")
 
-using Quante, Test
+using Quante
+if VERSION < v"0.7.0-DEV.2005"
+    using Base.Test
+else
+    using Test
+end
+
 @testset "Quante.jl" begin
 
 #include("C60.jl")
