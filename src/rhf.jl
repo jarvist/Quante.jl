@@ -22,8 +22,8 @@ function all_1e_ints(bfs::BasisSet,mol::Molecule)
     S = SharedArray{Float64}(n,n)
     T = SharedArray{Float64}(n,n)
     V = SharedArray{Float64}(n,n)
-    @sync @parallel for i = 1:n 
-        @sync @parallel for j = 1:i 
+    @sync @distributed for i = 1:n 
+        @sync @distributed for j = 1:i 
     #for (i,j) in pairs(n)
         a,b = bfs.bfs[i],bfs.bfs[j]
         S[i,j] = S[j,i] = overlap(a,b)
@@ -53,8 +53,8 @@ function all_2e_ints(bflist,ERI=coulomb_hgp;verbose::Bool=false) #coloumb
     ints2e = SharedArray{Float64}(totlen)
     #for (i,j,k,l) in iiterator(n)
     if verbose println(n^4/4," ints to calculate. Each '.' is ",n^2/2) end
-    @sync @parallel for i=1:n # Nb: need sync on both these parallel, to force completion of Ints before SCF
-        @sync @parallel for j=1:i 
+    @sync @distributed for i=1:n # Nb: need sync on both these parallel, to force completion of Ints before SCF
+        @sync @distributed for j=1:i 
             for (k,l) in pairs(n) 
                 if triangle(i,j) <= triangle(k,l)
                     ints2e[iindex(i,j,k,l)] = ERI(bflist.bfs[i],bflist.bfs[j],bflist.bfs[k],bflist.bfs[l])
@@ -77,9 +77,9 @@ end
 """
 function make2JmK(D::Array{Float64,2},Ints::SharedArray{Float64,1})
     n = size(D,1)
-    G = Array{Float64}(n,n)
+    G = Array{Float64}(undef,n,n) # undef is for 1.0 compat. Unsure what it does.
     D1 = reshape(D,n*n)
-    temp = Array{Float64}(n*n)
+    temp = Array{Float64}(undef,n*n)
     for (i,j) in pairs(n)
         kl = 1
         for (k,l) in rpairs(n)
@@ -118,7 +118,7 @@ function rhf(mol::Molecule,MaxIter::Int64=40; verbose::Bool=false, Econvergence:
     h = T+V
     # generalised eigenvalue decomposition of one-electron hamiltonian and overlap matrix 
     # used as starting guess for self-consistent procedure?
-    E,U = eig(h,S)
+    E,U = eigen(h,S)
     # Enuke = (classical) nuclear repulision
     Enuke = nuclear_repulsion(mol)
     # Define occupied and virtual orbitals
@@ -138,7 +138,7 @@ function rhf(mol::Molecule,MaxIter::Int64=40; verbose::Bool=false, Econvergence:
     end
     println("SCF: Iteration TotalEnergy :=: Enuke + Eone + Etwo")
     for iter in 1:MaxIter
-        const α=0.4 # mixing of current and prior density matrices
+        α=0.4 # mixing of current and prior density matrices
         D = α*D + (1-α)*densitymatrix(U,nclosed) # density matrix; from eigenvalues U
         if verbose
             println("D=\n$D")
@@ -149,7 +149,7 @@ function rhf(mol::Molecule,MaxIter::Int64=40; verbose::Bool=false, Econvergence:
         # Fock matrix H = one-electron hamiltonian + G matrix
         H = h+G
         # Diagonalise the Fock Matrix ; eig=Generalised eigenvalue decomposition
-        E,U = eig(H,S)
+        E,U = eigen(H,S)
         # expanded versions of trace2 functions
         Eone = sum(D.*h) # one electron contribution
         Etwo = sum(D.*H) # should be = sum of occupied Fock orbitals

@@ -121,7 +121,7 @@ const sto3g = [
 ]
 basis_set_data = Dict("sto3g" => sto3g)
 
-type BasisSet # list of CGBFs
+mutable struct BasisSet # list of CGBFs
     bfs::Array{CGBF,1}
 end
 

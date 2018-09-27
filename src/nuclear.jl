@@ -103,7 +103,7 @@ function test_one()
     x=y=0.
     println("S: $(overlap(s1,s2))")
     println("T: $(kinetic(s1,s2))")
-    for z in linspace(0,1,5)
+    for z in range(0,stop=1,length=5)
         println("V: $z $(nuclear_attraction(s1,s2,x,y,z))")
     end
 end

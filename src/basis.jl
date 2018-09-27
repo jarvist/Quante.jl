@@ -1,6 +1,6 @@
 # ## Basis function definitions
 
-type PGBF
+mutable struct PGBF
     expn::Float64
     x::Float64
     y::Float64
@@ -28,7 +28,7 @@ function normalize!(pbf::PGBF)
 end
 
 
-type CGBF
+mutable struct CGBF
     x::Float64
     y::Float64
     z::Float64

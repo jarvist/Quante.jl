@@ -44,13 +44,13 @@ end
 function gcf(a::Float64,x::Float64,ITMAX::Int64=200,EPS::Float64=3e-9,FPMIN::Float64=1e-30)
     #Continued fraction representation of Gamma. NumRec sect 6.1"
     gln=lgamma(a)
-    b=x+1.-a
-    c=1./FPMIN
-    d=1./b
+    b=x+1.0-a
+    c=1.0/FPMIN
+    d=1.0/b
     h=d
     for i in 1:ITMAX
         an=-i*(i-a)
-        b=b+2.
+        b=b+2.0
         d=an*d+b
         if abs(d) < FPMIN
             d=FPMIN
@@ -59,10 +59,10 @@ function gcf(a::Float64,x::Float64,ITMAX::Int64=200,EPS::Float64=3e-9,FPMIN::Flo
         if abs(c) < FPMIN
             c=FPMIN
         end
-        d=1./d
+        d=1.0/d
         delt=d*c
         h=h*delt
-        if abs(delt-1.) < EPS
+        if abs(delt-1.0) < EPS
             break
         end
     end

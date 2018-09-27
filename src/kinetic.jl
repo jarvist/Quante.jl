@@ -1,6 +1,4 @@
-"""
 ### Kinetic matrix elements
-"""
 
 function kinetic(a::PGBF,b::PGBF)
     return a.norm*b.norm*kinetic(a.expn,a.x,a.y,a.z,a.I,a.J,a.K,

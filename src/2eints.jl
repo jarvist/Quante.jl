@@ -1,6 +1,4 @@
-"""
 ## Two electron integrals
-"""
 
 function coulomb(aexpn::Float64,ax::Float64,ay::Float64,az::Float64,
                  aI::Int64,aJ::Int64,aK::Int64,

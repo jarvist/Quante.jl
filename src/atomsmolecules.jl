@@ -2,14 +2,14 @@
 
 export AtoBohr!, Atom, Molecule, AtoZ
 
-type Atom
+mutable struct Atom
     atno::Int64
     x::Float64
     y::Float64
     z::Float64
 end
 
-type Molecule
+mutable struct Molecule
     atomlist::Array{Atom,1}
 end
 

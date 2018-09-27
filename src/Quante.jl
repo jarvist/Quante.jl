@@ -1,9 +1,5 @@
-"""
 # Quante.jl
-A fork of PqQuante in Julia; experimenting with quantum chemistry in the Julia language.
-
-"""
-
+## A fork of PqQuante in Julia; experimenting with quantum chemistry in the Julia language.
 module Quante
 
 # Pull in necessary STDLIB stuff for Julia 0.7+

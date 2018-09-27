@@ -1,7 +1,5 @@
-"""
 ## One-electron integrals
 ### Overlap matrix elements
-"""
 
 function overlap(a::PGBF,b::PGBF)
     return a.norm*b.norm*overlap(a.expn,a.x,a.y,a.z,a.I,a.J,a.K,
