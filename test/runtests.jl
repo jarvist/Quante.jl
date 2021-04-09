@@ -20,7 +20,6 @@ function microtest() # collection of microscopic tests, within scope of function
     Quante.test_overlap()
     Quante.test_kinetic()
     Quante.test_a_terms()
-    Quante.test_gamma()
     Quante.test_na()
     Quante.test_fgamma()
     Quante.test_one()
